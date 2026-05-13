@@ -1,0 +1,818 @@
+<style>
+    :root {
+      --primary-color: #ff6b6b;
+      --secondary-color: #4ecdc4;
+      --text-color: #333;
+      --background-color: #f9f9f9;
+      --line-height: 1.2;
+      --accent-color: #f06a28;
+      --dark-color: #101010;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    #our-team {
+      {% if section.settings.background_image %}
+        background-image: url("{{ section.settings.background_image | image_url: width: 1920 }}");
+      {% endif %}
+      background-size: cover;
+      background-position: center;
+      min-height: 100vh;
+      padding: 85px 0;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    #our-team::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(120deg, rgba(0, 0, 0, 0.76), rgba(8, 8, 8, 0.48)),
+        radial-gradient(circle at 12% 15%, rgba(240, 106, 40, 0.34), transparent 28%);
+      z-index: -1;
+    }
+
+    .heading-wraper {
+      text-align: center;
+      color: #fff;
+      margin-bottom: 54px;
+    }
+
+    .heading-wraper h4 {
+      font-size: 12px;
+      line-height: var(--line-height);
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    .heading-wraper h2 {
+      font-size: clamp(32px, 5vw, 58px);
+      line-height: 1.05;
+      font-weight: 700;
+      margin: 12px 0 0;
+    }
+
+    .team-member h3 {
+      color: #fff;
+    }
+
+    .team-member p {
+      color: #fff;
+    }
+
+    .social-media-wraper a {
+      text-decoration: none;
+    }
+
+    .team-member {
+      flex: 1 1 240px;
+      max-width: 270px;
+      height: 350px;
+      position: relative;
+      overflow: hidden;
+      overflow: clip;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 26px;
+      clip-path: inset(0 round 26px);
+      isolation: isolate;
+      contain: paint;
+      box-shadow: 0 24px 55px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      transform-style: flat;
+      will-change: transform;
+      backface-visibility: hidden;
+    }
+
+    .team-member img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: inherit;
+      display: block;
+      filter: saturate(0.82) contrast(1.04);
+      transform: scale(1.02);
+      transition: filter 0.5s ease;
+      will-change: transform;
+      backface-visibility: hidden;
+      z-index: 1;
+    }
+
+    .headingandsocial-media-wraper {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      right: 24px;
+      bottom: 24px;
+      left: 24px;
+      gap: 16px;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .team-sub-heading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      gap: 5px;
+
+    }
+
+    .team-sub-heading i {
+      color: var(--accent-color);
+      font-size: 14px;
+    }
+
+    .heading-item h3 {
+      font-size: 22px;
+      line-height: var(--line-height);
+      font-weight: 700;
+      margin: 0 0 6px;
+    }
+
+    .heading-item p {
+      line-height: var(--line-height);
+      font-size: 13px;
+      font-weight: 600;
+      margin: 0;
+      color: rgba(255, 255, 255, 0.76);
+    }
+
+    .team-icon {
+      position: relative;
+      display: inline-block;
+      width: 34px;
+      height: 34px;
+      background: rgba(255, 255, 255, 0.13);
+      font-size: 12px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(18px) scale(0.88);
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      pointer-events: auto;
+    }
+
+    .social-media-wraper {
+      display: flex;
+      gap: 8px;
+
+    }
+
+    .team-icon i {
+      font-size: 12px;
+    }
+
+
+    .shadow {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0) 34%, rgba(0, 0, 0, 0.84) 100%),
+        linear-gradient(145deg, rgba(240, 106, 40, 0), rgba(240, 106, 40, 0));
+      z-index: 10;
+      top: 0;
+      left: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      transition: background 0.45s ease;
+
+    }
+
+    .team-member::after {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 20px;
+      opacity: 0;
+      transform: scale(0.94);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      z-index: 12;
+      pointer-events: none;
+    }
+
+
+    .team-member:hover img {
+      filter: saturate(1.06) contrast(1.08);
+    }
+
+    .team-member:hover .shadow {
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0) 24%, rgba(0, 0, 0, 0.78) 100%),
+        linear-gradient(145deg, rgba(240, 106, 40, 0.48), rgba(240, 106, 40, 0.08));
+    }
+
+    .team-member:hover::after {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .team-member:hover .team-icon {
+      background: #fff;
+      border-color: #fff;
+      color: var(--dark-color);
+    }
+
+    .team-member:hover .team-icon,
+    .team-member:focus-within .team-icon {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .team-icon:hover {
+      background: var(--accent-color) !important;
+      border-color: var(--accent-color) !important;
+      color: #fff !important;
+    }
+
+    .team-card {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: center;
+      align-items: stretch;
+    }
+
+    .team-card.is-slider-enabled {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      overflow-x: auto;
+      overflow-y: visible;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .team-card.is-slider-enabled::-webkit-scrollbar {
+      display: none;
+    }
+
+    .team-card.is-slider-enabled .team-member {
+      scroll-snap-align: start;
+    }
+
+    .team-slider-controls {
+      display: none;
+    }
+
+    .team-slider-controls.is-visible {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .team-slider-btn {
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+      transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+    }
+
+    .team-slider-btn:hover {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      transform: translateY(-2px);
+    }
+
+    .team-slider-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+      transform: none;
+    }
+
+    .team-slider-dots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .team-slider-dot {
+      width: 7px;
+      height: 7px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.42);
+      padding: 0;
+      cursor: pointer;
+      transition: width 0.25s ease, background-color 0.25s ease;
+    }
+
+    .team-slider-dot.is-active {
+      width: 22px;
+      border-radius: 999px;
+      background: var(--accent-color);
+    }
+
+    @media (min-width: 768px) {
+      .team-card.is-slider-enabled {
+        padding: 18px 2px 20px;
+      }
+
+      .team-card.is-slider-enabled .team-member {
+        flex: 0 0 calc((100% - 72px) / 4);
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 767px) {
+      #our-team {
+        padding: 60px 0;
+      }
+
+      .heading-wraper {
+        margin-bottom: 36px;
+      }
+
+      .team-member {
+        flex: 0 0 min(86vw, 360px);
+        max-width: 420px;
+        height: 420px;
+      }
+
+      .team-card.is-slider-enabled {
+        gap: 18px;
+        margin-inline: -5%;
+        padding: 18px 5% 18px;
+        scroll-padding-inline: 5%;
+      }
+
+      .team-card.is-slider-enabled .team-member {
+        scroll-snap-align: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .team-member,
+      .team-member img,
+      .team-icon,
+      .team-member::after,
+      .shadow {
+        transition: none;
+      }
+    }
+  </style>
+
+  <section id="our-team">
+    <div class="container">
+      <div class="our-team-wraper">
+        <div class="heading-wraper">
+          <div class="team-sub-heading">
+            <i class="fa-brands fa-diaspora"></i>
+            <h4>{{ section.settings.section_title }}</h4>
+          </div>
+
+          <h2>{{ section.settings.section_heading }}</h2>
+        </div>
+      </div>
+
+      <div class="team-card">
+
+        {% for block in section.blocks %}
+          {% if block.type == 'team_member' %}
+            <!-- Team Member -->
+            <div class="team-member">
+              {% if block.settings.member_image %}
+                <img
+                  src="{{ block.settings.member_image | image_url: width: 500 }}"
+                  alt="{{ block.settings.member_name }}" />
+              {% endif %}
+
+              <div class="headingandsocial-media-wraper">
+                <div class="heading-item">
+                  <h3>{{ block.settings.member_name }}</h3>
+                  <p>{{ block.settings.member_title }}</p>
+                </div>
+
+                <div class="social-media-wraper">
+                  {% if block.settings.facebook_url %}
+                    <a href="{{ block.settings.facebook_url }}" class="team-icon" title="Facebook">
+                      <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+                  {% endif %}
+
+                  {% if block.settings.linkedin_url %}
+                    <a href="{{ block.settings.linkedin_url }}" class="team-icon" title="LinkedIn">
+                      <i class="fa-brands fa-linkedin-in"></i>
+                    </a>
+                  {% endif %}
+
+                  {% if block.settings.instagram_url %}
+                    <a href="{{ block.settings.instagram_url }}" class="team-icon" title="Instagram">
+                      <i class="fa-brands fa-instagram"></i>
+                    </a>
+                  {% endif %}
+
+                  {% if block.settings.twitter_url %}
+                    <a href="{{ block.settings.twitter_url }}" class="team-icon" title="Twitter">
+                      <i class="fa-brands fa-x-twitter"></i>
+                    </a>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="shadow"></div>
+            </div>
+          {% endif %}
+        {% endfor %}
+
+
+
+
+
+      </div>
+
+      <div class="team-slider-controls" aria-label="Team slider controls">
+        <button class="team-slider-btn team-slider-prev" type="button" aria-label="Previous team member">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <div class="team-slider-dots"></div>
+        <button class="team-slider-btn team-slider-next" type="button" aria-label="Next team member">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <script>
+    (function() {
+      // Load Font Awesome
+      const fontAwesomeScript = document.createElement('script');
+      fontAwesomeScript.src = 'https://kit.fontawesome.com/dc2639864d.js';
+      fontAwesomeScript.async = true;
+      document.head.appendChild(fontAwesomeScript);
+    })();
+
+    window.addEventListener("load", () => {
+      const teamSlider = document.querySelector(".team-card");
+      const teamSlides = Array.from(document.querySelectorAll(".team-member"));
+      const prevBtn = document.querySelector(".team-slider-prev");
+      const nextBtn = document.querySelector(".team-slider-next");
+      const dotsWrap = document.querySelector(".team-slider-dots");
+      const mobileSlider = window.matchMedia("(max-width: 767px)");
+      const desktopSlider = window.matchMedia("(min-width: 768px)");
+      let currentSlide = 0;
+
+      const isMobileSlider = () => mobileSlider.matches;
+      const isDesktopSlider = () => desktopSlider.matches && teamSlides.length > 4;
+      const isSliderEnabled = () => isMobileSlider() || isDesktopSlider();
+      const getVisibleSlides = () => isDesktopSlider() ? 4 : 1;
+      const getMaxSlide = () => Math.max(0, teamSlides.length - getVisibleSlides());
+
+      const buildSliderDots = () => {
+        if (!dotsWrap) {
+          return;
+        }
+
+        dotsWrap.innerHTML = "";
+
+        for (let index = 0; index <= getMaxSlide(); index++) {
+          const dot = document.createElement("button");
+          dot.className = "team-slider-dot";
+          dot.type = "button";
+          dot.setAttribute("aria-label", `Go to team member ${index + 1}`);
+          dot.addEventListener("click", () => scrollToSlide(index));
+          dotsWrap.appendChild(dot);
+        }
+      };
+
+      const setActiveSlide = (index) => {
+        if (!teamSlides.length || !prevBtn || !nextBtn) {
+          return;
+        }
+
+        currentSlide = Math.max(0, Math.min(index, getMaxSlide()));
+
+        prevBtn.disabled = currentSlide === 0;
+        nextBtn.disabled = currentSlide === getMaxSlide();
+
+        if (dotsWrap) {
+          dotsWrap.querySelectorAll(".team-slider-dot").forEach((dot, dotIndex) => {
+            dot.classList.toggle("is-active", dotIndex === currentSlide);
+          });
+        }
+      };
+
+      const scrollToSlide = (index) => {
+        if (!teamSlider || !teamSlides.length) {
+          return;
+        }
+
+        setActiveSlide(index);
+
+        if (isSliderEnabled()) {
+          teamSlides[currentSlide].scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+            inline: isDesktopSlider() ? "start" : "center",
+          });
+        }
+      };
+
+      const updateSliderMode = () => {
+        if (!teamSlider || !prevBtn || !nextBtn || !dotsWrap) {
+          return;
+        }
+
+        const enabled = isSliderEnabled();
+
+        teamSlider.classList.toggle("is-slider-enabled", enabled);
+        prevBtn.parentElement.classList.toggle("is-visible", enabled);
+        teamSlider.scrollLeft = 0;
+        currentSlide = 0;
+
+        buildSliderDots();
+        setActiveSlide(0);
+      };
+
+      if (teamSlider && teamSlides.length && prevBtn && nextBtn && dotsWrap) {
+        prevBtn.addEventListener("click", () => scrollToSlide(currentSlide - 1));
+        nextBtn.addEventListener("click", () => scrollToSlide(currentSlide + 1));
+
+        teamSlider.addEventListener("scroll", () => {
+          if (!isSliderEnabled()) {
+            return;
+          }
+
+          let nearestIndex = 0;
+          let nearestDistance = Infinity;
+
+          teamSlides.forEach((slide, index) => {
+            const distance = isDesktopSlider()
+              ? Math.abs(teamSlider.scrollLeft - (slide.offsetLeft - teamSlider.offsetLeft))
+              : Math.abs(
+                teamSlider.getBoundingClientRect().left + teamSlider.clientWidth / 2 -
+                (slide.getBoundingClientRect().left + slide.getBoundingClientRect().width / 2)
+              );
+
+            if (distance < nearestDistance) {
+              nearestDistance = distance;
+              nearestIndex = index;
+            }
+          });
+
+          setActiveSlide(nearestIndex);
+        }, { passive: true });
+
+        if (mobileSlider.addEventListener) {
+          mobileSlider.addEventListener("change", updateSliderMode);
+          desktopSlider.addEventListener("change", updateSliderMode);
+        } else {
+          mobileSlider.addListener(updateSliderMode);
+          desktopSlider.addListener(updateSliderMode);
+        }
+
+        updateSliderMode();
+      }
+
+      if (!window.gsap) {
+        return;
+      }
+
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (!prefersReducedMotion) {
+        gsap.from(".team-sub-heading", {
+          y: 24,
+          opacity: 0,
+          duration: 0.7,
+          ease: "power3.out",
+        });
+
+        gsap.from(".heading-wraper h2", {
+          y: 38,
+          opacity: 0,
+          duration: 0.9,
+          delay: 0.12,
+          ease: "power3.out",
+        });
+
+        gsap.from(".team-member", {
+          y: 70,
+          opacity: 0,
+          rotateX: 10,
+          duration: 0.85,
+          delay: 0.24,
+          stagger: 0.12,
+          ease: "power3.out",
+        });
+      }
+
+      if (prefersReducedMotion) {
+        return;
+      }
+
+      document.querySelectorAll(".team-member").forEach((card) => {
+        const image = card.querySelector("img");
+        const content = card.querySelector(".headingandsocial-media-wraper");
+        const icons = card.querySelectorAll(".team-icon");
+
+        const hoverIn = () => {
+          gsap.killTweensOf([card, image, content, icons]);
+
+          gsap.to(card, {
+            y: -14,
+            duration: 0.45,
+            overwrite: "auto",
+            ease: "power3.out",
+          });
+
+          gsap.to(image, {
+            scale: 1.1,
+            duration: 0.65,
+            overwrite: "auto",
+            ease: "power3.out",
+          });
+
+          gsap.to(content, {
+            y: -10,
+            duration: 0.45,
+            overwrite: "auto",
+            ease: "power3.out",
+          });
+
+          gsap.to(icons, {
+            y: 0,
+            scale: 1,
+            opacity: 1,
+            duration: 0.42,
+            stagger: 0.05,
+            overwrite: "auto",
+            ease: "back.out(1.8)",
+          });
+        };
+
+        const hoverOut = () => {
+          gsap.killTweensOf([card, image, content, icons]);
+
+          gsap.to(card, {
+            y: 0,
+            duration: 0.45,
+            overwrite: "auto",
+            ease: "power3.out",
+          });
+
+          gsap.to(image, {
+            x: 0,
+            y: 0,
+            scale: 1.02,
+            duration: 0.55,
+            overwrite: "auto",
+            ease: "power3.out",
+          });
+
+          gsap.to(content, {
+            y: 0,
+            duration: 0.4,
+            overwrite: "auto",
+            ease: "power3.out",
+          });
+
+          gsap.to(icons, {
+            y: 18,
+            scale: 0.88,
+            opacity: 0,
+            duration: 0.25,
+            stagger: 0.03,
+            overwrite: "auto",
+            ease: "power2.in",
+          });
+        };
+
+        card.addEventListener("mouseenter", hoverIn);
+        card.addEventListener("mouseleave", hoverOut);
+        card.addEventListener("focusin", hoverIn);
+        card.addEventListener("focusout", hoverOut);
+        card.addEventListener("mousemove", (event) => {
+          const rect = card.getBoundingClientRect();
+          const x = ((event.clientX - rect.left) / rect.width - 0.5) * 10;
+          const y = ((event.clientY - rect.top) / rect.height - 0.5) * 10;
+
+          gsap.to(image, {
+            x,
+            y,
+            duration: 0.45,
+            overwrite: "auto",
+            ease: "power2.out",
+          });
+        });
+      });
+    });
+  </script>
+
+{% schema %}
+{
+  "name": "Our Team",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "OUR TEAM"
+    },
+    {
+      "type": "text",
+      "id": "section_heading",
+      "label": "Section Heading",
+      "default": "Lorem Ipsum Dolor Sit Amet Consectetur."
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_slider",
+      "label": "Enable slider for mobile",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "team_member",
+      "name": "Team Member",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "member_image",
+          "label": "Member Image"
+        },
+        {
+          "type": "text",
+          "id": "member_name",
+          "label": "Member Name",
+          "default": "John Doe"
+        },
+        {
+          "type": "text",
+          "id": "member_title",
+          "label": "Member Title",
+          "default": "CEO & Founder"
+        },
+        {
+          "type": "text",
+          "id": "facebook_url",
+          "label": "Facebook URL"
+        },
+        {
+          "type": "text",
+          "id": "linkedin_url",
+          "label": "LinkedIn URL"
+        },
+        {
+          "type": "text",
+          "id": "instagram_url",
+          "label": "Instagram URL"
+        },
+        {
+          "type": "text",
+          "id": "twitter_url",
+          "label": "Twitter/X URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Our Team"
+    }
+  ]
+}
+{% endschema %}
